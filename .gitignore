@@ -23,3 +23,7 @@
 /WpfAnimation/obj/*.props
 /WpfAnimation/obj/*.targets
 /WpfAnimation/obj/*.cache
+/.vs/ProjectEvaluation/*.v2
+/.vs/WpfAnimation/DesignTimeBuild/*.v2
+/WpfAnimation/bin/Debug/netcoreapp3.1/temp/1/*.png
+/WpfAnimation/obj/Debug/netcoreapp3.1/*.json

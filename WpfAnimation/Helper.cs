@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Windows.Media.Imaging;
 using KeyFrameAnimation;
 
@@ -92,5 +93,55 @@ namespace WpfAnimation
 
             return null;
         }
+
+        //获取字符串md5值
+        public static string GetStringMd5(string oriString)
+        {
+            try
+            {
+                if (oriString.Length == 0)
+                {
+                    return "";
+                }
+                System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+                byte[] ret = md5.ComputeHash(System.Text.Encoding.UTF8.GetBytes(oriString));
+
+                StringBuilder sBuilder = new StringBuilder();
+                foreach (var t in ret)
+                {
+                    sBuilder.Append(t.ToString("x2"));
+                }
+                return sBuilder.ToString();
+            }
+            catch { }
+            return oriString;
+        }
+
+        //解压文件
+        public static bool UnCompressFile(string sExtractPath, string sZipFilePath)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(sExtractPath) || string.IsNullOrEmpty(sZipFilePath))
+                    return false;
+
+                if (!File.Exists(sZipFilePath))
+                    return false;
+
+                //var sDir = Path.GetDirectoryName(sExtractPath);
+                //if (string.IsNullOrEmpty(sDir))
+                //    return false;
+
+                if (AppDomain.CurrentDomain.BaseDirectory != null)
+                    SevenZip.SevenZipBase.SetLibraryPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "7z.dll"));
+
+                SevenZip.SevenZipExtractor extractor = new SevenZip.SevenZipExtractor(sZipFilePath);
+                extractor.ExtractArchive(sExtractPath);
+                extractor.Dispose();
+            }
+            catch {}
+            return true;
+        }
+
     }
 }

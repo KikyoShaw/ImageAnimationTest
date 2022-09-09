@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="ImageLoader" Version="1.0.0" />
     <PackageReference Include="KeyFrameAnimation" Version="1.0.0" />
+    <PackageReference Include="Shaman.SevenZipSharp" Version="1.0.6.3" />
   </ItemGroup>
 
 </Project>

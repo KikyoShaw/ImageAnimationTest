@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KeyFrameAnimation;
 using System.Windows.Forms;
@@ -71,6 +61,43 @@ namespace WpfAnimation
                     TestAnimImage.IsShow = true;
                 }
             }
+        }
+
+        private void ButtonBase_OnClick3(object sender, RoutedEventArgs e)
+        {
+            //先停止播放动画
+            TestAnimImage.IsShow = false;
+            OpenFileDialog dialog = new OpenFileDialog();
+            //该值确定是否可以选择多个文件,当前不然多选
+            dialog.Multiselect = false;
+            dialog.Title = "请选择文件夹";
+            dialog.Filter = "所有文件(*.*)|*.*";
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var path = dialog.FileName;
+                var safeFileName = dialog.SafeFileName ?? "";
+                if (safeFileName.Contains("."))
+                    safeFileName = safeFileName.Substring(0, safeFileName.LastIndexOf(".", StringComparison.Ordinal));
+                string resPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"temp\" + safeFileName);
+
+                //先判断文件是否存在
+                if (!Directory.Exists(resPath) ||
+                    ((Directory.GetFiles(resPath).Length <= 0) && (Directory.GetDirectories(resPath).Length <= 0)))
+                {
+                    var result = Helper.UnCompressFile(@"temp", path);
+                    if(!result)
+                        return;
+                }
+
+                var imageCache = TestAnimImage.ImageCache;
+                if (imageCache != null)
+                {
+                    AnimationCache.Instance.AddKeyFrames(resPath, Helper.GetKeyFrames(resPath));
+                    ImageBehavior.SetSourceKey(imageCache, resPath);
+                    TestAnimImage.IsShow = true;
+                }
+            }
+
         }
     }
 }
