@@ -132,6 +132,9 @@ namespace WpfAnimation
                 //if (string.IsNullOrEmpty(sDir))
                 //    return false;
 
+                if (Directory.Exists(sExtractPath))
+                    Directory.Delete(sExtractPath, true);
+
                 if (AppDomain.CurrentDomain.BaseDirectory != null)
                     SevenZip.SevenZipBase.SetLibraryPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "7z.dll"));
 

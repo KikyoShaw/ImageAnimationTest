@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Shapes;
 using KeyFrameAnimation;
 using System.Windows.Forms;
+using Path = System.IO.Path;
 
 namespace WpfAnimation
 {
@@ -63,6 +64,7 @@ namespace WpfAnimation
             }
         }
 
+        private static string _packageCacheRelativePath = @"colkwallpaper\Cache\ImageAnimationPlugin\Resources\";
         private void ButtonBase_OnClick3(object sender, RoutedEventArgs e)
         {
             //先停止播放动画
@@ -75,16 +77,19 @@ namespace WpfAnimation
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 var path = dialog.FileName;
-                var safeFileName = dialog.SafeFileName ?? "";
-                if (safeFileName.Contains("."))
-                    safeFileName = safeFileName.Substring(0, safeFileName.LastIndexOf(".", StringComparison.Ordinal));
-                string resPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"temp\" + safeFileName);
+                var replace = path.Substring(path.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
+                var safeFileName = replace.Substring(0, replace.LastIndexOf(".", StringComparison.Ordinal));
+                //var safeFileName = Helper.GetStringMd5(path);
+                //string resPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"temp\" + safeFileName);
+                var md5 = Helper.GetStringMd5(path);
+                var resPath = Path.Combine(Path.GetTempPath(), _packageCacheRelativePath);
+                //resPath = Path.Combine(resPath, md5);
 
                 //先判断文件是否存在
                 if (!Directory.Exists(resPath) ||
                     ((Directory.GetFiles(resPath).Length <= 0) && (Directory.GetDirectories(resPath).Length <= 0)))
                 {
-                    var result = Helper.UnCompressFile(@"temp", path);
+                    var result = Helper.UnCompressFile(resPath, path);
                     if(!result)
                         return;
                 }
@@ -92,8 +97,9 @@ namespace WpfAnimation
                 var imageCache = TestAnimImage.ImageCache;
                 if (imageCache != null)
                 {
-                    AnimationCache.Instance.AddKeyFrames(resPath, Helper.GetKeyFrames(resPath));
-                    ImageBehavior.SetSourceKey(imageCache, resPath);
+                    var newPath = Path.Combine(resPath, safeFileName);
+                    AnimationCache.Instance.AddKeyFrames(newPath, Helper.GetKeyFrames(newPath));
+                    ImageBehavior.SetSourceKey(imageCache, newPath);
                     TestAnimImage.IsShow = true;
                 }
             }
