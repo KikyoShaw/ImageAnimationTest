@@ -12,8 +12,10 @@
                 <Button Width="80" Height="45" Content="选择文件夹" Click="ButtonBase_OnClick"/>
                 <Button Width="80" Height="45" Content="选择资源" Click="ButtonBase_OnClick2" Margin="10 0 0 0"/>
                 <Button Width="80" Height="45" Content="加载压缩包" Click="ButtonBase_OnClick3" Margin="10 0 0 0"/>
+                <Button Width="80" Height="45" Content="webp在线" Click="ButtonBase_OnClick4" Margin="10 0 0 0"/>
+                <Button Width="80" Height="45" Content="Gif在线" Click="ButtonBase_OnClick5" Margin="10 0 0 0"/>
             </StackPanel>
-            <local:Animation x:Name="TestAnimImage" Width="160" Height="160" Margin="0 50 0 0"/>
+            <local:Animation x:Name="TestAnimImage" Height="160" Margin="20 50 20 0"/>
         </StackPanel>
     </Grid>
 </Window>

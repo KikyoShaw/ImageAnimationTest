@@ -105,5 +105,35 @@ namespace WpfAnimation
             }
 
         }
+
+        private void ButtonBase_OnClick4(object sender, RoutedEventArgs e)
+        {
+            var path = @"E:\shaw\demo\WPF-demo\ImageAnimationTest\Image\2.webp";
+            var url = @"https://livewebbs2.msstatic.com/complay_mastertag_1650363908760.png";
+            LoadWebpAsync(url, path);
+        }
+
+        private async void LoadWebpAsync(string uri, string path)
+        {
+            var asyncValue = await Helper.GetSourceData(uri, path);
+            if (asyncValue != null)
+            {
+                TestAnimImage.IsShow = false;
+                var imageCache = TestAnimImage.ImageCache;
+                if (imageCache != null)
+                {
+                    AnimationCache.Instance.AddKeyFrames(path, Helper.GetWebpOrGif(path));
+                    ImageBehavior.SetSourceKey(imageCache, path);
+                    TestAnimImage.IsShow = true;
+                }
+            }
+        }
+
+        private void ButtonBase_OnClick5(object sender, RoutedEventArgs e)
+        {
+            var path = @"E:\shaw\demo\WPF-demo\ImageAnimationTest\Image\3.gif";
+            var url = @"https://pgdt.gtimg.cn/gdt/0/DAAAE_qAPoABaABjBdoZrvA0Q9TxkV.gif/0?ck=5d7b7f9f83997745bd00c27f11d06bc0";
+            LoadWebpAsync(url, path);
+        }
     }
 }
